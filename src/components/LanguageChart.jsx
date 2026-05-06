@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
@@ -37,11 +38,25 @@ function getLangColor(lang, index) {
   return LANG_COLORS[lang] ?? FALLBACK[index % FALLBACK.length];
 }
 
+function formatBytes(bytes) {
+  if (bytes >= 1e6) return `${(bytes / 1e6).toFixed(1)} MB`;
+  if (bytes >= 1e3) return `${(bytes / 1e3).toFixed(1)} KB`;
+  return `${bytes} B`;
+}
+
 export default function LanguageChart({ languages }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(false);
+    const t = setTimeout(() => setMounted(true), 80);
+    return () => clearTimeout(t);
+  }, [languages]);
+
   if (!languages.length) {
     return (
-      <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-6 flex items-center justify-center min-h-[200px]">
-        <p className="text-[#8b949e] text-sm">No language data available</p>
+      <div className="card p-6 flex items-center justify-center min-h-[220px]">
+        <p className="text-[#6e7681] text-sm">No language data available</p>
       </div>
     );
   }
@@ -55,7 +70,7 @@ export default function LanguageChart({ languages }) {
       {
         data: languages.map(([, bytes]) => bytes),
         backgroundColor: colors,
-        borderColor: '#161b22',
+        borderColor: '#0d1117',
         borderWidth: 3,
         hoverBorderWidth: 1,
         hoverOffset: 4,
@@ -66,7 +81,7 @@ export default function LanguageChart({ languages }) {
   const options = {
     responsive: true,
     maintainAspectRatio: true,
-    cutout: '68%',
+    cutout: '70%',
     plugins: {
       legend: { display: false },
       tooltip: {
@@ -76,8 +91,8 @@ export default function LanguageChart({ languages }) {
             return `  ${ctx.label}: ${pct}%`;
           },
         },
-        backgroundColor: '#0d1117',
-        borderColor: '#30363d',
+        backgroundColor: '#010409',
+        borderColor: '#21262d',
         borderWidth: 1,
         titleColor: '#c9d1d9',
         bodyColor: '#8b949e',
@@ -87,25 +102,47 @@ export default function LanguageChart({ languages }) {
   };
 
   return (
-    <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-6">
-      <h3 className="text-xs font-semibold text-[#8b949e] uppercase tracking-widest mb-5 font-space">
-        Language Breakdown
-      </h3>
+    <div className="card p-6">
+      <div className="flex items-center justify-between mb-5">
+        <h3 className="text-xs font-semibold text-[#8b949e] uppercase tracking-widest font-mono">
+          Language Breakdown
+        </h3>
+        <span className="text-xs text-[#58a6ff] font-mono">{formatBytes(total)}</span>
+      </div>
+
       <div className="flex flex-col sm:flex-row items-center gap-6">
-        <div className="w-40 h-40 shrink-0">
+        {/* Donut */}
+        <div className="w-36 h-36 shrink-0">
           <Doughnut data={chartData} options={options} />
         </div>
-        <div className="flex flex-col gap-2.5 w-full min-w-0">
+
+        {/* Language bars */}
+        <div className="flex flex-col gap-3.5 w-full min-w-0">
           {languages.map(([lang, bytes], i) => {
             const pct = ((bytes / total) * 100).toFixed(1);
+            const color = getLangColor(lang, i);
             return (
-              <div key={lang} className="flex items-center gap-2 min-w-0">
-                <span
-                  className="w-2.5 h-2.5 rounded-full shrink-0"
-                  style={{ backgroundColor: getLangColor(lang, i) }}
-                />
-                <span className="text-sm text-[#c9d1d9] flex-1 truncate">{lang}</span>
-                <span className="text-xs text-[#8b949e] font-space shrink-0">{pct}%</span>
+              <div key={lang} className="space-y-1">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span
+                      className="w-2 h-2 rounded-full shrink-0"
+                      style={{ backgroundColor: color }}
+                    />
+                    <span className="text-xs text-[#c9d1d9] truncate">{lang}</span>
+                  </div>
+                  <span className="text-[11px] text-[#6e7681] font-mono shrink-0">{pct}%</span>
+                </div>
+                <div className="h-[3px] bg-[#21262d] rounded-full overflow-hidden">
+                  <div
+                    style={{
+                      width: mounted ? `${pct}%` : '0%',
+                      backgroundColor: color,
+                      transition: `width 700ms cubic-bezier(0.25, 1, 0.5, 1) ${i * 80}ms`,
+                    }}
+                    className="h-full rounded-full"
+                  />
+                </div>
               </div>
             );
           })}

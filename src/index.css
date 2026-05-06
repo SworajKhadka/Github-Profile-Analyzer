@@ -1,59 +1,71 @@
 @import "tailwindcss";
 
 @theme {
-  --font-mono: 'Space Mono', ui-monospace, Consolas, 'Courier New', monospace;
+  --font-mono: 'Geist Mono', ui-monospace, Consolas, 'Courier New', monospace;
 }
 
+/* ─── Keyframes ──────────────────────────────────────── */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ─── Utility classes ────────────────────────────────── */
 .fade-in {
   animation: fadeIn 0.4s ease-out both;
 }
 
-.font-space {
-  font-family: 'Space Mono', ui-monospace, Consolas, monospace;
+.font-geist {
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
 }
 
-* {
-  box-sizing: border-box;
+/* Glowing blue underline — applied to a span inside h1 */
+.glow-underline {
+  position: relative;
+  display: inline-block;
 }
+.glow-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #58a6ff;
+  border-radius: 1px;
+  box-shadow: 0 0 6px #58a6ff, 0 0 18px #58a6ff99, 0 0 40px #58a6ff33;
+}
+
+/* Subtle CSS-only grid for landing page */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Shared card shell — bg, border, radius */
+.card {
+  background-color: #0d1117;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+}
+
+/* ─── Global reset / base ────────────────────────────── */
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
-  background-color: #0d1117;
+  background-color: #010409;
   color: #c9d1d9;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
-    sans-serif;
+  font-family: 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
-  width: 100%;
-}
+#root { width: 100%; }
 
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0d1117;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #30363d;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #484f58;
-}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #010409; }
+::-webkit-scrollbar-thumb { background: #21262d; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #30363d; }
