@@ -57,7 +57,7 @@ function WarningIllustration() {
 }
 
 export default function App() {
-  const { user, repos, languages, activity, loading, error, search } = useGithub();
+  const { user, repos, languages, activity, totalCommits, loading, error, search } = useGithub();
   const hasData = user && !loading;
 
   return (
@@ -102,7 +102,7 @@ export default function App() {
           {/* Data state */}
           {hasData && (
             <div className="space-y-6 pb-10">
-              <ProfileCard user={user} />
+              <ProfileCard user={user} totalCommits={totalCommits} />
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 fade-in">
                 <LanguageChart languages={languages} />
                 <ActivityGraph activity={activity} />

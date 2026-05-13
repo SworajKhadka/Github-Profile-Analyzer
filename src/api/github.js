@@ -21,7 +21,19 @@ export const fetchRepos = (username) =>
 export const fetchLanguages = (fullName) =>
   api.get(`/repos/${fullName}/languages`).then((r) => r.data);
 
-export const fetchEvents = (username) =>
+export const fetchRecentCommits = (fullName, username, since) =>
   api
-    .get(`/users/${username}/events`, { params: { per_page: 100 } })
-    .then((r) => r.data);
+    .get(`/repos/${fullName}/commits`, {
+      params: { author: username, since, per_page: 100 },
+    })
+    .then((r) => r.data)
+    .catch(() => []);
+
+export const fetchTotalCommits = (username) =>
+  api
+    .get('/search/commits', {
+      params: { q: `author:${username}`, per_page: 1 },
+      headers: { Accept: 'application/vnd.github.cloak-preview+json' },
+    })
+    .then((r) => r.data.total_count)
+    .catch(() => null);

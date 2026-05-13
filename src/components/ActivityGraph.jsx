@@ -100,7 +100,7 @@ export default function ActivityGraph({ activity }) {
 
       <div className="h-44 relative">
         <div className={isAllZero ? 'opacity-[0.15]' : ''} style={{ height: '100%' }}>
-          <Bar data={chartData} options={options} />
+          <Bar data={chartData} options={options} style={{ height: '100%' }} />
         </div>
         {isAllZero && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 pointer-events-none">

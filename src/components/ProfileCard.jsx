@@ -77,7 +77,7 @@ function MetaItem({ icon, children }) {
   );
 }
 
-export default function ProfileCard({ user }) {
+export default function ProfileCard({ user, totalCommits }) {
   const memberSince = new Date(user.created_at).getFullYear();
 
   return (
@@ -164,6 +164,7 @@ export default function ProfileCard({ user }) {
         <Stat label="Followers" value={user.followers} />
         <Stat label="Following" value={user.following} />
         <Stat label="Gists" value={user.public_gists} />
+        <Stat label="Commits" value={totalCommits ?? 0} />
       </div>
     </div>
   );
