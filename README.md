@@ -2,7 +2,7 @@
 
 A clean, fast web app for exploring any GitHub profile at a glance — commit activity, top repositories, language breakdown, and key stats, all in one view.
 
-**Live Demo →** [your-vercel-url.vercel.app](github-profile-analyzer-eta.vercel.app)
+**Live Demo →**(github-profile-analyzer-eta.vercel.app)
 
 ---
 
